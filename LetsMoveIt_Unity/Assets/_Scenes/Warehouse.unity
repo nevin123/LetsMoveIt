@@ -457,7 +457,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1001 &510018116
 Prefab:
@@ -693,7 +693,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &669352616
 Prefab:
@@ -1380,11 +1380,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1172365847}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 45}
+  m_LocalPosition: {x: 15, y: 0, z: 48}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1179381528
 Prefab:
@@ -1614,7 +1614,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1001 &1360272513
 Prefab:
@@ -1694,46 +1694,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0bf255deaa695c40b6955999b284bf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fleetManager: {fileID: 0}
   robotParent: {fileID: 606468682}
   robots:
   - {fileID: 11400000, guid: 50514d7660e4fab43be298522db2cda7, type: 2}
   - {fileID: 11400000, guid: 2fcada5c3037d7a4babdc17b462b932f, type: 2}
   taskLists:
-  - name: EV3_01
+  - name: EV3_01 - 3 tasks
     robot: {fileID: 11400000, guid: 50514d7660e4fab43be298522db2cda7, type: 2}
     list:
     - name: task 1
       task: 0
-      startPosition: {x: 0, y: 0, z: -45}
+      newPosition: {x: 20, y: 0, z: -48}
       moveTo: {x: 0, y: 0, z: 0}
       waitForSeconds: 0
     - name: task 2
       task: 1
-      startPosition: {x: 0, y: 0, z: 0}
+      newPosition: {x: 0, y: 0, z: 0}
       moveTo: {x: 0, y: 0, z: 0}
       waitForSeconds: 0
     - name: task 3
       task: 2
-      startPosition: {x: 0, y: 0, z: 0}
+      newPosition: {x: 0, y: 0, z: 0}
       moveTo: {x: 0, y: 0, z: 0}
       waitForSeconds: 0
-  - name: EV3_02
+  - name: EV3_02 - 3 tasks
     robot: {fileID: 11400000, guid: 2fcada5c3037d7a4babdc17b462b932f, type: 2}
     list:
     - name: task 1
       task: 0
-      startPosition: {x: 0, y: 0, z: 45}
+      newPosition: {x: -20, y: 0, z: 48}
       moveTo: {x: 0, y: 0, z: 0}
       waitForSeconds: 0
     - name: task 2
       task: 1
-      startPosition: {x: 0, y: 0, z: 0}
+      newPosition: {x: 0, y: 0, z: 0}
       moveTo: {x: 0, y: 0, z: 0}
       waitForSeconds: 0
     - name: task 3
       task: 2
-      startPosition: {x: 0, y: 0, z: 0}
+      newPosition: {x: 0, y: 0, z: 0}
       moveTo: {x: 0, y: 0, z: 0}
       waitForSeconds: 0
 --- !u!4 &1397910136
@@ -1747,7 +1746,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1452285119
 Prefab:
@@ -2286,7 +2285,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1949305840
 MonoBehaviour:
@@ -2299,14 +2298,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3df27b9289d1e8c4fb82e0df4f4673ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AgentTypeID: 0
+  m_AgentTypeID: -1372625422
   m_CollectObjects: 0
   m_Size: {x: 10, y: 10, z: 10}
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 311
-  m_UseGeometry: 1
+    m_Bits: 1335
+  m_UseGeometry: 0
   m_DefaultArea: 0
   m_IgnoreNavMeshAgent: 1
   m_IgnoreNavMeshObstacle: 1

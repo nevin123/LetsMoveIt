@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+[ExecuteInEditMode]
 public class GameManager : MonoBehaviour
 {
     public GameObject robotParent;
@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
     {
         foreach (TaskList list in taskLists)
         {
-            list.name = (list.robot != null) ? list.robot.name : ("Robot") + " - " + list.list.Length.ToString() + " tasks";
+            list.name = ((list.robot != null) ? list.robot.name : ("Robot")) + " - " + list.list.Length.ToString() + " tasks";
 
             for (int i = 0; i < list.list.Length; i++)
             {

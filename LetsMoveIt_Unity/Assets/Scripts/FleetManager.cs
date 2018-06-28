@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class FleetManager : MonoBehaviour {
 
@@ -15,16 +16,55 @@ public class FleetManager : MonoBehaviour {
 
     #endregion
 
-    public Dictionary<RobotController, Queue<Task>> robotList;
+    List<RobotController> robots;
+    Dictionary<RobotController, Queue<Task>> robotList;
 
     void Start()
     {
+        robots = new List<RobotController>();
         robotList = new Dictionary<RobotController, Queue<Task>>();
     }
 
-    public void Test()
+    void Update()
     {
-        Debug.Log("test");
+        foreach (RobotController robot in robots)
+        {
+            //No more tasks to do
+            if(robotList[robot].Count <= 0)
+            {
+                continue;
+            }
+
+            Task currentTask = CurrentTask(robot);
+
+            switch (currentTask.task)
+            {
+                case TaskOption.teleport:
+                    robot.Teleport(currentTask.newPosition);
+                    NextTask(robot);
+                    break;
+                case TaskOption.move:
+                    Debug.Log("test " + robot.name);
+                    break;
+                case TaskOption.wait:
+                    break;
+            }
+
+            NavMeshPath path = new NavMeshPath();
+            NavMesh.CalculatePath(robot.transform.position, new Vector3(0, 0, 0), 1, path);
+
+            for (int i = 0; i < path.corners.Length; i++)
+            {
+                if (i == 0)
+                {
+                    Debug.DrawLine(robot.transform.position, path.corners[i], Color.red);
+                }
+                else
+                {
+                    Debug.DrawLine(path.corners[i - 1], path.corners[i], Color.red);
+                }
+            }
+        }
     }
 
     public void AddRobot(RobotController robotController, TaskList taskList)
@@ -36,14 +76,18 @@ public class FleetManager : MonoBehaviour {
             newTaskList.Enqueue(task);
         }
 
+        robots.Add(robotController);
         robotList.Add(robotController, newTaskList);
-
-        DebugRobot(robotController);
     }
 
-    void DebugRobot(RobotController robotController)
+    Task CurrentTask(RobotController robotController)
     {
-        Debug.Log(robotList[robotController].Peek().task);
+        return robotList[robotController].Peek();
+    }
+
+    void NextTask(RobotController robotController)
+    {
+        robotList[robotController].Dequeue();
     }
 
 

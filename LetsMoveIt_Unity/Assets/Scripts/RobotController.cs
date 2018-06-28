@@ -16,7 +16,18 @@ public class RobotController : MonoBehaviour {
         gameObject.GetComponent<Renderer>().material.color = robotValues.robotColor;
     }
 
-    //Move to function
-    //Diameter / Size
-    //Speed
+    public void Teleport(Vector3 position)
+    {
+        transform.position = position;
+    }
+
+    public void Move(float towards)
+    {
+
+    }
+
+    public void Rotate(float deg)
+    {
+
+    }
 }

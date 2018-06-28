@@ -9,7 +9,7 @@ public class Task
     public TaskOption task;
 
     //Start
-    public Vector3 startPosition = Vector3.zero;
+    public Vector3 newPosition = Vector3.zero;
 
     //Move
     public Vector3 moveTo = Vector3.zero;
@@ -20,7 +20,7 @@ public class Task
 
 public enum TaskOption
 {
-    start,
+    teleport,
     move,
     wait
 }
