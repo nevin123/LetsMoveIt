@@ -19,6 +19,8 @@ public class FleetManager : MonoBehaviour {
     List<RobotController> robots;
     Dictionary<RobotController, Queue<Task>> robotList;
 
+    float timer = 0;
+
     void Start()
     {
         robots = new List<RobotController>();
@@ -32,6 +34,7 @@ public class FleetManager : MonoBehaviour {
             //No more tasks to do
             if(robotList[robot].Count <= 0)
             {
+                Debug.LogWarning(robot + " had finished all the tasks given");
                 continue;
             }
 
@@ -44,25 +47,85 @@ public class FleetManager : MonoBehaviour {
                     NextTask(robot);
                     break;
                 case TaskOption.move:
-                    Debug.Log("test " + robot.name);
+                    
+                    //Check if robot reached destination
+                    if(Vector3.Distance(robot.transform.position, currentTask.moveTo) < 0.5f)
+                    {
+                        Debug.Log(robot.name + "arrived at: " + currentTask.moveTo);
+                        NextTask(robot);
+                        continue;
+                    }
+
+                    //Generate new path
+                    NavMeshPath path = new NavMeshPath();
+                    NavMesh.CalculatePath(robot.transform.position, currentTask.moveTo, NavMesh.AllAreas, path);
+
+                    //Check if path is valid
+                    if (path.status != NavMeshPathStatus.PathComplete)
+                    {
+                        //Debug.LogWarning(robot.name + " cannot reacht point " + currentTask.moveTo + " - path is invalid");
+                        //NextTask(robot);
+                        //continue;
+                    }
+
+                    //Debugging
+                    DrawPath(robot.transform.position, path.corners);
+
+                    //Move/Rotate robot
+                    if (path.corners.Length > 1)
+                    {
+                        Vector3 nextPos = path.corners[1];
+                        nextPos.y = 0;
+
+                        //Calculate movement
+                        float distance = Vector3.Distance(robot.transform.position, nextPos);
+
+                        //Calculate rotation
+                        Vector3 dir = (nextPos - robot.transform.position).normalized;
+                        float angle = Vector3.Angle(robot.transform.forward, dir);
+
+                        float angleToRotate = Mathf.DeltaAngle(angle, 0);
+                        
+                        if(Vector3.Cross(robot.transform.forward, dir).y > 0)
+                        {
+                            angleToRotate = -angleToRotate;
+                        }
+
+                        foreach (NavMeshLink item in FindObjectsOfType<NavMeshLink>();
+                        {
+                            float dis = Vector3.Distance(item.startTransform.position, robot.transform.position);
+                            Debug.Log(dis);
+                            if (dis < 0.2f)
+                            {
+                                Debug.Log(robot.name + " wants to cross the link");
+                            }
+                        }
+
+                        //Apply Rotation and Movement
+                        if (Mathf.Abs(angleToRotate) > 0.5f)
+                        {
+                            robot.Rotate(Mathf.Clamp(angleToRotate, -robot.rotateSpeed * Time.deltaTime, robot.rotateSpeed * Time.deltaTime));
+                        } else
+                        {   
+                            robot.Move(Mathf.Clamp(distance, -robot.speed * Time.deltaTime, robot.speed * Time.deltaTime));
+                        }
+                    }
                     break;
                 case TaskOption.wait:
+                    if (timer <= 0)
+                    {
+                        timer = currentTask.waitForSeconds;
+                    }
+
+                    timer -= Time.deltaTime;
+
+                    if(timer <= 0)
+                    {
+                        NextTask(robot);
+                        continue;
+                    }
+
                     break;
-            }
-
-            NavMeshPath path = new NavMeshPath();
-            NavMesh.CalculatePath(robot.transform.position, new Vector3(0, 0, 0), 1, path);
-
-            for (int i = 0; i < path.corners.Length; i++)
-            {
-                if (i == 0)
-                {
-                    Debug.DrawLine(robot.transform.position, path.corners[i], Color.red);
-                }
-                else
-                {
-                    Debug.DrawLine(path.corners[i - 1], path.corners[i], Color.red);
-                }
             }
         }
     }
@@ -90,7 +153,16 @@ public class FleetManager : MonoBehaviour {
         robotList[robotController].Dequeue();
     }
 
-
+    void DrawPath(Vector3 start, Vector3[] path)
+    {
+        for (int i = 0; i < path.Length; i++)
+        {
+            if (i > 0)
+            {
+                Debug.DrawLine(path[i - 1], path[i], Color.red);
+            }
+        }
+    }
 
     //PathFinding
     //Tasks

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Name: EV3_02
   m_EditorClassIdentifier: 
   name: EV3_02
-  model: {fileID: 100000, guid: 31ef7adf60a358f4e80ff6ac4f83e585, type: 3}
+  model: {fileID: 1933731066475354, guid: 4c685d79d41026b40bb40a5aebee19a1, type: 2}
   robotColor: {r: 0.16561335, g: 0.7921569, b: 0.12156862, a: 1}
-  speed: 4
-  rotateSpeed: 0
+  speed: 10
+  rotateSpeed: 120
   diameter: 1

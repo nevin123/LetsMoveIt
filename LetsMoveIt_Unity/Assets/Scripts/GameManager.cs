@@ -41,7 +41,6 @@ public class GameManager : MonoBehaviour
             {
                 if(taskList.robot == robot)
                 {
-                    Debug.Log("bingo");
                     list = taskList;
                 }
             }
