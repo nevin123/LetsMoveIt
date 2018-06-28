@@ -90,11 +90,15 @@ public class FleetManager : MonoBehaviour {
                         {
                             angleToRotate = -angleToRotate;
                         }
-
-                        foreach (NavMeshLink item in FindObjectsOfType<NavMeshLink>();
+                        
+                        foreach (NavMeshLink item in FindObjectsOfType<NavMeshLink>())
                         {
-                            float dis = Vector3.Distance(item.startTransform.position, robot.transform.position);
-                            Debug.Log(dis);
+                            Debug.Log(item.name + " - " + (item.transform.position + item.startPoint));
+
+                            Vector3 startPoint = item.startPoint;
+
+                            float dis = Vector3.Distance(item.transform.position + item.startPoint, robot.transform.position);
+
                             if (dis < 0.2f)
                             {
                                 Debug.Log(robot.name + " wants to cross the link");
