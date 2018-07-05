@@ -9,11 +9,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 53162251c28368347a2765e3058546f6, type: 3}
-  m_Name: EV3_01
+  m_Name: belt_01
   m_EditorClassIdentifier: 
-  name: EV3_01
-  model: {fileID: 1933731066475354, guid: 4c685d79d41026b40bb40a5aebee19a1, type: 2}
-  robotColor: {r: 0.7924528, g: 0.12335351, b: 0.12335351, a: 1}
+  name: EV3_03
+  model: {fileID: 1144268343489624, guid: d696cc4b32ae3bf4cb125d4da9330634, type: 2}
+  robotColor: {r: 1, g: 0, b: 0.77192974, a: 1}
   speed: 10
   rotateSpeed: 120
   diameter: 1
+  var1: 0
+  var2: 0
+  var3: 0
+  var4: 0

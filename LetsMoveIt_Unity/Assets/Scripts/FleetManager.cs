@@ -75,6 +75,21 @@ public class FleetManager : MonoBehaviour {
                     if (path.corners.Length > 1)
                     {
                         Vector3 nextPos = path.corners[1];
+
+                        foreach (NavMeshLink item in FindObjectsOfType<NavMeshLink>())
+                        {
+                            Vector3 startPoint = item.startPoint;
+
+                            float dis = Vector3.Distance(item.transform.position + item.startPoint, robot.transform.position);
+
+                            if (dis < 0.2f)
+                            {
+                                Debug.Log(robot.name + " wants to cross the link");
+                                nextPos = item.endPoint;
+                            }
+                        }
+
+                        
                         nextPos.y = 0;
 
                         //Calculate movement
@@ -90,20 +105,6 @@ public class FleetManager : MonoBehaviour {
                         {
                             angleToRotate = -angleToRotate;
                         }
-                        
-                        foreach (NavMeshLink item in FindObjectsOfType<NavMeshLink>())
-                        {
-                            Debug.Log(item.name + " - " + (item.transform.position + item.startPoint));
-
-                            Vector3 startPoint = item.startPoint;
-
-                            float dis = Vector3.Distance(item.transform.position + item.startPoint, robot.transform.position);
-
-                            if (dis < 0.2f)
-                            {
-                                Debug.Log(robot.name + " wants to cross the link");
-                            }
-                        }
 
                         //Apply Rotation and Movement
                         if (Mathf.Abs(angleToRotate) > 0.5f)
@@ -116,17 +117,9 @@ public class FleetManager : MonoBehaviour {
                     }
                     break;
                 case TaskOption.wait:
-                    if (timer <= 0)
-                    {
-                        timer = currentTask.waitForSeconds;
-                    }
-
-                    timer -= Time.deltaTime;
-
-                    if(timer <= 0)
+                    if(robot.Wait(currentTask.waitForSeconds))
                     {
                         NextTask(robot);
-                        continue;
                     }
 
                     break;
