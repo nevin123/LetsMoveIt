@@ -25,6 +25,7 @@ public class RobotController : MonoBehaviour {
         gameObject.transform.localScale = new Vector3(robotValues.diameter, 1, robotValues.diameter);
 
         carver = GetComponent<NavMeshObstacle>();
+        carver.enabled = true;
 
         foreach (Material mat in gameObject.transform.GetChild(0).GetComponent<Renderer>().materials)
         {

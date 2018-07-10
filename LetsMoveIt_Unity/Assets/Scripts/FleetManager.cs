@@ -75,7 +75,14 @@ public class FleetManager : MonoBehaviour {
                     foreach (NavMeshLink item in FindObjectsOfType<NavMeshLink>())
                     {
                         float dis1 = Vector3.Distance(item.transform.position + item.startPoint, robot.transform.position);
-                        float dis2 = Vector3.Distance(item.transform.position + item.startPoint, robot.path.corners[1]);
+                        float dis2 = 0;
+                        if(robot.path != null)
+                        {
+                            dis2 = Vector3.Distance(item.transform.position + item.startPoint, robot.path.corners[1]);
+                        } else
+                        {
+                            dis2 = 1000;
+                        }
 
                         if (dis1 < 0.3f && dis2 < 0.3f)
                         {
@@ -134,6 +141,9 @@ public class FleetManager : MonoBehaviour {
                     }
                     break;
                 case TaskOption.wait:
+                    //robot.path = null;
+                    robot.carver.enabled = true;
+
                     if(robot.Wait(currentTask.waitForSeconds))
                     {
                         NextTask(robot);
@@ -185,7 +195,7 @@ public class FleetManager : MonoBehaviour {
 
     public bool GetRobotPriority(RobotController robot1, RobotController robot2)
     {
-        if (robots.IndexOf(robot1) > robots.IndexOf(robot2) || robot2.path == null)
+        if (robots.IndexOf(robot1) > robots.IndexOf(robot2) || robot2.path == null || robot2.carver.enabled == true)
         {
             return true;
         }
