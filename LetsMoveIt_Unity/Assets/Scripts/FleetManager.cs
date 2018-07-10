@@ -46,7 +46,7 @@ public class FleetManager : MonoBehaviour {
                     NextTask(robot);
                     break;
                 case TaskOption.move:
-                    //Check if robot reached destination
+                    //Check if robots is has to wait for other robots to pass
                     if (robot.waitingForOtherRobot > 0)
                     {
                         robot.carver.enabled = true;
@@ -55,16 +55,22 @@ public class FleetManager : MonoBehaviour {
 
                     robot.carver.enabled = false;
 
-                    //Check if a new path needs to be calculated
-                    if (robot.path == null || robot.path.corners.Length < 1 || Vector3.Distance(robot.transform.position, robot.path.corners[1]) < 0.3f || robot.robotsWaitingForThis > 0) //||true)
+                    //Check if robot reached destination
+                    if(Vector3.Distance(robot.transform.position, currentTask.moveTo) < 0.2f)
                     {
-                        if (CalculateNewPath(robot) == false)
-                        {
-                            continue;
-                        }   
+                        robot.path = null;
+                        NextTask(robot);
                     }
 
-                    Vector3 nextPos = Vector3.zero;
+                    //Check if a new path needs to be calculated
+                    if (robot.path == null || robot.path.corners.Length < 1 || Vector3.Distance(robot.transform.position, robot.path.corners[1]) < 0.3f || robot.robotsWaitingForThis > 0)// ||true)
+                    {
+                        if (robot.name == "EV3_02")
+                        {
+                            Debug.Log("new path");
+                        }
+                        CalculateNewPath(robot);
+                    }
 
                     foreach (NavMeshLink item in FindObjectsOfType<NavMeshLink>())
                     {
@@ -74,39 +80,57 @@ public class FleetManager : MonoBehaviour {
                         if (dis1 < 0.3f && dis2 < 0.3f)
                         {
                             Debug.Log(robot.name + " wants to cross the link");
+                            robot.crossing = true;
                             robot.path.corners[1] = item.transform.position + item.endPoint;
                         }
                     }
 
+                    Vector3 nextPos = Vector3.zero;
                     nextPos = robot.path.corners[1];
+                    nextPos.y = 0;
 
-                    //Move/Rotate robot
-                    if (nextPos != Vector3.zero)
-                    {   
-                        nextPos.y = 0;
+                    //Move/Rotate robot  
 
-                        //Calculate movement
-                        float distance = Vector3.Distance(robot.transform.position, nextPos);
+                    //Calculate movement
+                    float distance = Vector3.Distance(robot.transform.position, nextPos);
 
-                        //Calculate rotation
-                        Vector3 dir = (nextPos - robot.transform.position).normalized;
-                        float angle = Vector3.Angle(robot.transform.forward, dir);
+                    //Calculate rotation
 
-                        float angleToRotate = Mathf.DeltaAngle(angle, 0);
+                    Vector3 dir = nextPos - robot.transform.position;
+                    if(dir == Vector3.zero)
+                    {
+                        if (robot.path.corners.Length > 1)
+                        {
+                            nextPos = robot.path.corners[2];
+                            dir = nextPos - robot.transform.position;
+                        }
+                    }
+
+                    Quaternion rot = Quaternion.LookRotation(dir);
+
+                    if(robot.name == "EV3_02")
+                    {
+                        //Debug.Log("test");
+                    }
+                    /*
+                    Vector3 dir = (nextPos - robot.transform.position).normalized;
+                    float angle = Vector3.Angle(robot.transform.forward, dir);
+
+                    float angleToRotate = Mathf.DeltaAngle(angle, 0);
                         
-                        if(Vector3.Cross(robot.transform.forward, dir).y > 0)
-                        {
-                            angleToRotate = -angleToRotate;
-                        }
+                    if(Vector3.Cross(robot.transform.forward, dir).y > 0)
+                    {
+                        angleToRotate = -angleToRotate;
+                    }*/
 
-                        //Apply Rotation and Movement
-                        if (Mathf.Abs(angleToRotate) > 0.01f)
-                        {
-                            robot.Rotate(Mathf.Clamp(angleToRotate, -robot.rotateSpeed * Time.deltaTime, robot.rotateSpeed * Time.deltaTime));
-                        } else
-                        {   
-                            robot.Move(Mathf.Clamp(distance, -robot.speed * Time.deltaTime, robot.speed * Time.deltaTime));
-                        }
+                    //Apply Rotation and Movement
+                    if (rot != robot.transform.rotation)//Mathf.Abs(angle) > 0f)
+                    {
+                        robot.Rotate(rot);
+                        //robot.Rotate(Mathf.Clamp(angle, -robot.rotateSpeed * Time.deltaTime, robot.rotateSpeed * Time.deltaTime));
+                    } else
+                    {   
+                        robot.Move(Mathf.Clamp(distance, -robot.speed * Time.deltaTime, robot.speed * Time.deltaTime));
                     }
                     break;
                 case TaskOption.wait:
@@ -135,7 +159,12 @@ public class FleetManager : MonoBehaviour {
 
     Task CurrentTask(RobotController robotController)
     {
-        return robotList[robotController].Peek();
+        if (robotList[robotController].Count > 0)
+        {
+            return robotList[robotController].Peek();
+        }
+
+        return null;
     }
 
     void NextTask(RobotController robotController)
@@ -156,7 +185,7 @@ public class FleetManager : MonoBehaviour {
 
     public bool GetRobotPriority(RobotController robot1, RobotController robot2)
     {
-        if (robots.IndexOf(robot1) > robots.IndexOf(robot2))
+        if (robots.IndexOf(robot1) > robots.IndexOf(robot2) || robot2.path == null)
         {
             return true;
         }
@@ -169,6 +198,11 @@ public class FleetManager : MonoBehaviour {
     public bool CalculateNewPath(RobotController robot)
     {
         Task currentTask = CurrentTask(robot);
+
+        if(currentTask == null)
+        {
+            return false;
+        }
 
         robot.GetComponent<NavMeshObstacle>().enabled = false;
         //Generate new path
