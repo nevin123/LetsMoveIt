@@ -3,12 +3,17 @@ using UnityEngine.AI;
 
 public class RobotController : MonoBehaviour {
 
-    public Vector3 positionToMoveTo;
+    public NavMeshPath path;
+    //public Vector3 positionToMoveTo;
+    public int waitingForOtherRobot = 0;
+    public int robotsWaitingForThis = 0;
 
     public float speed = 0;
     public float rotateSpeed = 0;
 
     float timer = 0;
+
+    public NavMeshObstacle carver;
 
     public void InitializeRobot(Robot robotValues)
     {
@@ -17,6 +22,8 @@ public class RobotController : MonoBehaviour {
 
         gameObject.name = robotValues.name;
         gameObject.transform.localScale = new Vector3(robotValues.diameter, 1, robotValues.diameter);
+
+        carver = GetComponent<NavMeshObstacle>();
 
         foreach (Material mat in gameObject.transform.GetChild(0).GetComponent<Renderer>().materials)
         {
@@ -44,11 +51,48 @@ public class RobotController : MonoBehaviour {
         transform.Rotate(new Vector3(0,deg,0));
     }
 
-    private void OnTriggerEnter(Collider col)
+    private void OnCollisionEnter(Collision col)
     {
         if (col.gameObject.layer != LayerMask.NameToLayer("Floor") && Time.time > 0.1f)
         {
             Debug.LogError(gameObject.name + " collided with " + col.gameObject.name + ". make sure this doesnt happen again!");
+        }
+    }
+
+    private void OnTriggerEnter(Collider col)
+    {
+        if (col.gameObject.layer != LayerMask.NameToLayer("Floor") && Time.time > 0.1f)
+        {
+            if(col.GetComponent<RobotController>())
+            {
+                if(FleetManager.instance.GetRobotPriority(this, col.GetComponent<RobotController>()))
+                {
+                    robotsWaitingForThis++;
+                    
+                } else
+                {
+                    waitingForOtherRobot++;
+                }
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider col)
+    {
+        if (col.gameObject.layer != LayerMask.NameToLayer("Floor") && Time.time > 0.1f)
+        {
+            if (col.GetComponent<RobotController>())
+            {
+                if (FleetManager.instance.GetRobotPriority(this, col.GetComponent<RobotController>()))
+                {
+                    robotsWaitingForThis --;
+                    robotsWaitingForThis = Mathf.Clamp(robotsWaitingForThis, 0, int.MaxValue);
+                } else
+                {
+                    waitingForOtherRobot--;
+                    waitingForOtherRobot = Mathf.Clamp(waitingForOtherRobot, 0, int.MaxValue);
+                }
+            }
         }
     }
 

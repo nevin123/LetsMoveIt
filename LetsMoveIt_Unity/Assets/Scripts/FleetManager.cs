@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -48,64 +47,38 @@ public class FleetManager : MonoBehaviour {
                     break;
                 case TaskOption.move:
                     //Check if robot reached destination
-                    if (Vector3.Distance(robot.transform.position, currentTask.moveTo) < 0.3f)
+                    if (robot.waitingForOtherRobot > 0)
                     {
-                        Debug.Log(robot.name + "arrived at: " + currentTask.moveTo);
-                        NextTask(robot);
+                        robot.carver.enabled = true;
                         continue;
                     }
 
-                    if (Vector3.Distance(robot.transform.position, robot.positionToMoveTo) < 0.3f)
+                    robot.carver.enabled = false;
+
+                    //Check if a new path needs to be calculated
+                    if (robot.path == null || robot.path.corners.Length < 1 || Vector3.Distance(robot.transform.position, robot.path.corners[1]) < 0.3f || robot.robotsWaitingForThis > 0) //||true)
                     {
-                        robot.positionToMoveTo = Vector3.zero;
+                        if (CalculateNewPath(robot) == false)
+                        {
+                            continue;
+                        }   
                     }
 
                     Vector3 nextPos = Vector3.zero;
 
-                    nextPos = robot.positionToMoveTo;
-
                     foreach (NavMeshLink item in FindObjectsOfType<NavMeshLink>())
                     {
                         float dis1 = Vector3.Distance(item.transform.position + item.startPoint, robot.transform.position);
-                        float dis2 = Vector3.Distance(item.transform.position + item.startPoint, nextPos);
+                        float dis2 = Vector3.Distance(item.transform.position + item.startPoint, robot.path.corners[1]);
 
-                        if (dis1 < 0.3f && dis2 > 0.3f)
+                        if (dis1 < 0.3f && dis2 < 0.3f)
                         {
                             Debug.Log(robot.name + " wants to cross the link");
-                            nextPos = item.transform.position + item.endPoint;
-                            robot.positionToMoveTo = nextPos;
+                            robot.path.corners[1] = item.transform.position + item.endPoint;
                         }
                     }
 
-                    if (robot.positionToMoveTo == Vector3.zero || robot.positionToMoveTo == null /*|| true*/)
-                    {
-                        robot.GetComponent<NavMeshObstacle>().enabled = false;
-                        //Generate new path
-                        NavMeshPath path = new NavMeshPath();
-                        NavMesh.CalculatePath(robot.transform.position /*+ robot.transform.forward * robot.transform.localScale.x * 0.6f*/, currentTask.moveTo, NavMesh.AllAreas, path);
-
-                        //Check if path is valid
-                        if (path.status != NavMeshPathStatus.PathComplete)
-                        {
-                            Debug.LogWarning(robot.name + " cannot reacht point " + currentTask.moveTo + " - path is invalid");
-                            //NextTask(robot);
-                            continue;
-                        }
-
-                        if (path.corners.Length > 1)
-                        {
-                            nextPos = path.corners[1];
-                            robot.positionToMoveTo = nextPos;
-
-                            //robot.GetComponent<NavMeshObstacle>().enabled = true;
-                        }
-
-                        //Debugging
-                        DrawPath(robot.transform.position, path.corners);
-                    } else
-                    {
-                        nextPos = robot.positionToMoveTo;
-                    }
+                    nextPos = robot.path.corners[1];
 
                     //Move/Rotate robot
                     if (nextPos != Vector3.zero)
@@ -181,8 +154,42 @@ public class FleetManager : MonoBehaviour {
         }
     }
 
-    //PathFinding
-    //Tasks
-    //Move Different Robots
-    //Let Robots do stuff
+    public bool GetRobotPriority(RobotController robot1, RobotController robot2)
+    {
+        if (robots.IndexOf(robot1) > robots.IndexOf(robot2))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public bool CalculateNewPath(RobotController robot)
+    {
+        Task currentTask = CurrentTask(robot);
+
+        robot.GetComponent<NavMeshObstacle>().enabled = false;
+        //Generate new path
+        NavMeshPath path = new NavMeshPath();
+        NavMesh.CalculatePath(robot.transform.position, currentTask.moveTo, NavMesh.AllAreas, path);
+
+        //Check if path is valid
+        if (path.status != NavMeshPathStatus.PathComplete)
+        {
+            Debug.LogWarning(robot.name + " cannot reacht point " + currentTask.moveTo + " - path is invalid");
+            return false;
+        }
+
+        if (path.corners.Length > 1)
+        {
+            robot.path = path;
+        }
+
+        //Debugging
+        DrawPath(robot.transform.position, path.corners);
+
+        return true;
+    }
 }
