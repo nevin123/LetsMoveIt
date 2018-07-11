@@ -18,12 +18,15 @@ public class FleetManager : MonoBehaviour {
     List<RobotController> robots;
     Dictionary<RobotController, Queue<Task>> robotList;
 
+    NavMeshLink[] allPathLinks;
+
     float timer = 0;
 
     void Start()
     {
         robots = new List<RobotController>();
         robotList = new Dictionary<RobotController, Queue<Task>>();
+        allPathLinks = FindObjectsOfType<NavMeshLink>();
     }
 
     void Update()
@@ -42,6 +45,7 @@ public class FleetManager : MonoBehaviour {
             switch (currentTask.task)
             {
                 case TaskOption.teleport:
+                    robot.carver.enabled = true;
                     robot.Teleport(currentTask.newPosition);
                     NextTask(robot);
                     break;
@@ -56,92 +60,50 @@ public class FleetManager : MonoBehaviour {
                     robot.carver.enabled = false;
 
                     //Check if robot reached destination
-                    if(Vector3.Distance(robot.transform.position, currentTask.moveTo) < 0.2f)
+                    if(Vector3.Distance(robot.transform.position, currentTask.moveTo) < 0.3f)
                     {
+                        robot.carver.enabled = true;
                         robot.path = null;
                         NextTask(robot);
                     }
 
                     //Check if a new path needs to be calculated
-                    if (robot.path == null || robot.path.corners.Length < 1 || Vector3.Distance(robot.transform.position, robot.path.corners[1]) < 0.3f || robot.robotsWaitingForThis > 0)// ||true)
+                    if (robot.path == null || robot.path.corners.Length <= 1 || robot.robotsWaitingForThis > 0 || Vector3.Distance(robot.transform.position, robot.path.corners[1]) < 0.3f)// ||true)
                     {
-                        if (robot.name == "EV3_02")
+                        if(CalculateNewPath(robot) == false)
                         {
-                            Debug.Log("new path");
-                        }
-                        CalculateNewPath(robot);
-                    }
-
-                    foreach (NavMeshLink item in FindObjectsOfType<NavMeshLink>())
-                    {
-                        float dis1 = Vector3.Distance(item.transform.position + item.startPoint, robot.transform.position);
-                        float dis2 = 0;
-                        if(robot.path != null)
-                        {
-                            dis2 = Vector3.Distance(item.transform.position + item.startPoint, robot.path.corners[1]);
-                        } else
-                        {
-                            dis2 = 1000;
-                        }
-
-                        if (dis1 < 0.3f && dis2 < 0.3f)
-                        {
-                            Debug.Log(robot.name + " wants to cross the link");
-                            robot.crossing = true;
-                            robot.path.corners[1] = item.transform.position + item.endPoint;
+                            continue;
                         }
                     }
 
-                    Vector3 nextPos = Vector3.zero;
-                    nextPos = robot.path.corners[1];
+                    //Check if path is valid
+                    if (robot.path == null || robot.path.corners.Length <= 1)
+                    {
+                        continue;
+                    }
+
+                    //Set position to move towards
+                    Vector3 nextPos = robot.path.corners[1];
                     nextPos.y = 0;
 
                     //Move/Rotate robot  
-
                     //Calculate movement
                     float distance = Vector3.Distance(robot.transform.position, nextPos);
 
                     //Calculate rotation
-
                     Vector3 dir = nextPos - robot.transform.position;
-                    if(dir == Vector3.zero)
-                    {
-                        if (robot.path.corners.Length > 1)
-                        {
-                            nextPos = robot.path.corners[2];
-                            dir = nextPos - robot.transform.position;
-                        }
-                    }
-
                     Quaternion rot = Quaternion.LookRotation(dir);
 
-                    if(robot.name == "EV3_02")
-                    {
-                        //Debug.Log("test");
-                    }
-                    /*
-                    Vector3 dir = (nextPos - robot.transform.position).normalized;
-                    float angle = Vector3.Angle(robot.transform.forward, dir);
-
-                    float angleToRotate = Mathf.DeltaAngle(angle, 0);
-                        
-                    if(Vector3.Cross(robot.transform.forward, dir).y > 0)
-                    {
-                        angleToRotate = -angleToRotate;
-                    }*/
-
                     //Apply Rotation and Movement
-                    if (rot != robot.transform.rotation)//Mathf.Abs(angle) > 0f)
+                    if (rot != robot.transform.rotation)
                     {
                         robot.Rotate(rot);
-                        //robot.Rotate(Mathf.Clamp(angle, -robot.rotateSpeed * Time.deltaTime, robot.rotateSpeed * Time.deltaTime));
                     } else
                     {   
                         robot.Move(Mathf.Clamp(distance, -robot.speed * Time.deltaTime, robot.speed * Time.deltaTime));
                     }
                     break;
                 case TaskOption.wait:
-                    //robot.path = null;
                     robot.carver.enabled = true;
 
                     if(robot.Wait(currentTask.waitForSeconds))
@@ -220,9 +182,9 @@ public class FleetManager : MonoBehaviour {
         NavMesh.CalculatePath(robot.transform.position, currentTask.moveTo, NavMesh.AllAreas, path);
 
         //Check if path is valid
-        if (path.status != NavMeshPathStatus.PathComplete)
+        if (path.status == NavMeshPathStatus.PathInvalid)
         {
-            Debug.LogWarning(robot.name + " cannot reacht point " + currentTask.moveTo + " - path is invalid");
+            //Debug.LogWarning(robot.name + " cannot reacht point " + currentTask.moveTo + " - path is invalid");
             return false;
         }
 

@@ -4,7 +4,7 @@ using UnityEngine.AI;
 public class RobotController : MonoBehaviour {
 
     public NavMeshPath path;
-    public bool crossing;
+
     //public Vector3 positionToMoveTo;
     public int waitingForOtherRobot = 0;
     public int robotsWaitingForThis = 0;
@@ -51,7 +51,6 @@ public class RobotController : MonoBehaviour {
     public void Rotate(Quaternion rot)
     {
         transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, rotateSpeed * Time.deltaTime);
-        //transform.Rotate(new Vector3(0,deg,0));
     }
 
     private void OnCollisionEnter(Collision col)
