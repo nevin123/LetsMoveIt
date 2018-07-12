@@ -22579,6 +22579,7 @@ GameObject:
   - component: {fileID: 1318451060}
   - component: {fileID: 1318451059}
   - component: {fileID: 1318451062}
+  - component: {fileID: 1318451063}
   m_Layer: 0
   m_Name: Top Camera
   m_TagString: MainCamera
@@ -22703,6 +22704,20 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles: []
+--- !u!114 &1318451063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1318451058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00f1f44054fca5649abce65ff8b6d597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minZoom: 10
+  maxZoom: 50
+  zoomSpeed: 5
 --- !u!1001 &1318971192
 Prefab:
   m_ObjectHideFlags: 0
@@ -24862,6 +24877,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2fcada5c3037d7a4babdc17b462b932f, type: 2}
   - {fileID: 11400000, guid: f7d9fa3ea348c7749939bfcd0e8269e8, type: 2}
   - {fileID: 11400000, guid: 01f1d00f00835e343be55bf6b91fd59a, type: 2}
+  - {fileID: 11400000, guid: b133eeacf1708aa4b96ceacf225958b1, type: 2}
   - {fileID: 11400000, guid: b133eeacf1708aa4b96ceacf225958b1, type: 2}
   taskLists:
   - name: 1. 4 steps to complete
