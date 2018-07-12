@@ -16,7 +16,9 @@ public class FleetManager : MonoBehaviour {
     #endregion
 
     List<RobotController> robots;
-    Dictionary<RobotController, Queue<Task>> robotList;
+    Dictionary<RobotController, Queue<TaskPart>> robotList;
+
+    List<TaskObject> taskList;
 
     NavMeshLink[] allPathLinks;
 
@@ -25,7 +27,9 @@ public class FleetManager : MonoBehaviour {
     void Start()
     {
         robots = new List<RobotController>();
-        robotList = new Dictionary<RobotController, Queue<Task>>();
+        robotList = new Dictionary<RobotController, Queue<TaskPart>>();
+        taskList = new List<TaskObject>();
+
         allPathLinks = FindObjectsOfType<NavMeshLink>();
     }
 
@@ -36,11 +40,12 @@ public class FleetManager : MonoBehaviour {
             //No more tasks to do
             if(robotList[robot].Count <= 0)
             {
-                Debug.LogWarning(robot + " had finished all the tasks given");
+                Debug.LogWarning(robot + " had finished task given");
+                GiveRobotTasks(robot);
                 continue;
             }
 
-            Task currentTask = CurrentTask(robot);
+            TaskPart currentTask = CurrentTask(robot);
 
             switch (currentTask.task)
             {
@@ -68,7 +73,7 @@ public class FleetManager : MonoBehaviour {
                     }
 
                     //Check if a new path needs to be calculated
-                    if (robot.path == null || robot.path.corners.Length <= 1 || robot.robotsWaitingForThis > 0 || Vector3.Distance(robot.transform.position, robot.path.corners[1]) < 0.3f)// ||true)
+                    if (robot.path == null || robot.path.corners.Length <= 1 || robot.robotsWaitingForThis > 0 || Vector3.Distance(robot.transform.position, robot.path.corners[1]) < 0.3f || robot.vel == 0) // ||true)
                     {
                         if(CalculateNewPath(robot) == false)
                         {
@@ -94,6 +99,12 @@ public class FleetManager : MonoBehaviour {
                     Vector3 dir = nextPos - robot.transform.position;
                     Quaternion rot = Quaternion.LookRotation(dir);
 
+                    if(dir == Vector3.zero)
+                    {
+                        rot = robot.transform.rotation;
+                        robot.transform.position += Vector3.right * 0.01f;
+                    }
+
                     //Apply Rotation and Movement
                     if (rot != robot.transform.rotation)
                     {
@@ -116,20 +127,21 @@ public class FleetManager : MonoBehaviour {
         }
     }
 
-    public void AddRobot(RobotController robotController, TaskList taskList)
+    public void AddRobot(RobotController robotController)
     {
-        Queue<Task> newTaskList = new Queue<Task>();
-        
-        foreach (Task task in taskList.list)
-        {
-            newTaskList.Enqueue(task);
-        }
-
         robots.Add(robotController);
-        robotList.Add(robotController, newTaskList);
+        robotList.Add(robotController, new Queue<TaskPart>());
     }
 
-    Task CurrentTask(RobotController robotController)
+    public void AddTaskList(TaskObject[] taskObjects)
+    {
+        foreach (TaskObject taskObject in taskObjects)
+        {
+            taskList.Add(taskObject);
+        }
+    }
+
+    TaskPart CurrentTask(RobotController robotController)
     {
         if (robotList[robotController].Count > 0)
         {
@@ -139,9 +151,60 @@ public class FleetManager : MonoBehaviour {
         return null;
     }
 
-    void NextTask(RobotController robotController)
+    void GiveRobotTasks(RobotController robot)
     {
-        robotList[robotController].Dequeue();
+        if(taskList.Count <= 0)
+        {
+            Debug.LogWarning("All tasks are finished");
+            GetRobotBackToStart(robot);
+            return;
+        }
+
+        TaskObject newTasks = new TaskObject();
+        bool foundTask = false;
+
+        for (int i = 0; i < taskList.Count; i++)
+        {
+            if ((taskList[i].var1 == robot.var1 || robot.var1) &&
+                (taskList[i].var2 == robot.var2 || robot.var2) &&
+                (taskList[i].var3 == robot.var3 || robot.var3) &&
+                (taskList[i].var4 == robot.var4 || robot.var4))
+            {
+                newTasks = taskList[i];
+
+                foundTask = true;
+                Debug.Log(robot.name + " - " + newTasks.name);
+
+                taskList.Remove(newTasks);
+                break;
+            }
+        }
+
+        if(foundTask && newTasks != new TaskObject() && newTasks.list.Length > 0)
+        {
+            foreach (TaskPart task in newTasks.list)
+            {
+                robotList[robot].Enqueue(task);
+            }
+        } else
+        {
+            //No available tasks for this robot, so back to start
+            GetRobotBackToStart(robot);
+        }
+    }
+
+    void GetRobotBackToStart(RobotController robot)
+    {
+        TaskPart backToStartTask = new TaskPart();
+        backToStartTask.moveTo = robot.startPos;
+        backToStartTask.task = TaskOption.move;
+
+        robotList[robot].Enqueue(backToStartTask);
+    }
+
+    void NextTask(RobotController robot)
+    {
+        robotList[robot].Dequeue();
     }
 
     void DrawPath(Vector3 start, Vector3[] path)
@@ -169,7 +232,7 @@ public class FleetManager : MonoBehaviour {
 
     public bool CalculateNewPath(RobotController robot)
     {
-        Task currentTask = CurrentTask(robot);
+        TaskPart currentTask = CurrentTask(robot);
 
         if(currentTask == null)
         {

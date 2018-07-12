@@ -11,12 +11,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53162251c28368347a2765e3058546f6, type: 3}
   m_Name: gripper_02
   m_EditorClassIdentifier: 
-  name: EV3_02
+  name: gripper_02
   model: {fileID: 1679735361199406, guid: fa01c375b3bfb0547a2de12429837fb0, type: 2}
   robotColor: {r: 0.06432748, g: 1, b: 0, a: 1}
   speed: 10
   rotateSpeed: 120
   diameter: 1
+  startPosition: {x: -35, y: -45}
   var1: 0
   var2: 0
   var3: 0

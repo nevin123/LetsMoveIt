@@ -20,11 +20,11 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientSkyColor: {r: 1, g: 1, b: 1, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
-  m_AmbientIntensity: 1
-  m_AmbientMode: 0
+  m_AmbientIntensity: 2
+  m_AmbientMode: 3
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
   m_HaloStrength: 0.5
@@ -37,8 +37,8 @@ RenderSettings:
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
-  m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
+  m_Sun: {fileID: 393891454}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -53,7 +53,7 @@ LightmapSettings:
     m_TemporalCoherenceThreshold: 1
     m_EnvironmentLightingMode: 0
     m_EnableBakedLightmaps: 1
-    m_EnableRealtimeLightmaps: 0
+    m_EnableRealtimeLightmaps: 1
   m_LightmapEditorSettings:
     serializedVersion: 10
     m_Resolution: 2
@@ -89,8 +89,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
-  m_LightingDataAsset: {fileID: 112000002, guid: 20931d9b79281b04c83c122d1b6fdb33,
-    type: 2}
+  m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
@@ -2421,6 +2420,72 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4734641057727358, guid: 9c0c7b8c3e905b545952954f64e869bf,
     type: 2}
   m_PrefabInternal: {fileID: 226178931}
+--- !u!1 &245310259
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 245310261}
+  - component: {fileID: 245310260}
+  m_Layer: 0
+  m_Name: 2nd Light
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!108 &245310260
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 245310259}
+  m_Enabled: 1
+  serializedVersion: 8
+  m_Type: 1
+  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Intensity: 1.2
+  m_Range: 10
+  m_SpotAngle: 30
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+--- !u!4 &245310261
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 245310259}
+  m_LocalRotation: {x: 0.54277676, y: 0.54070234, z: -0.35581967, w: 0.5351887}
+  m_LocalPosition: {x: 0, y: -5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1786653682}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 74.964005, y: 132.1, z: 52.601}
 --- !u!1001 &262137167
 Prefab:
   m_ObjectHideFlags: 0
@@ -4756,10 +4821,12 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1949305839}
+  - {fileID: 1786653682}
   - {fileID: 606468686}
   - {fileID: 2011465401}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &345066202
 Prefab:
@@ -4879,8 +4946,8 @@ Transform:
   m_LocalPosition: {x: 0, y: -5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_Father: {fileID: 1786653682}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1001 &478680500
 Prefab:
@@ -9239,7 +9306,7 @@ Transform:
   m_Children:
   - {fileID: 1149513847}
   m_Father: {fileID: 327991892}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &634844313
 GameObject:
@@ -20126,9 +20193,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1172365848}
   m_Layer: 0
-  m_Name: position
+  m_Name: position - debug
   m_TagString: Untagged
-  m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -20139,11 +20206,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1172365847}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 15, y: 0, z: -2}
+  m_LocalPosition: {x: 8, y: 0, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1175934719
 Prefab:
@@ -22555,7 +22622,7 @@ Camera:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingPath: -1
+  m_RenderingPath: 1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
@@ -22577,7 +22644,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!114 &1318451062
 MonoBehaviour:
@@ -22585,7 +22652,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1318451058}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 948f4100a11a5c24981795d21301da5c, type: 3}
   m_Name: 
@@ -24794,66 +24861,243 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 50514d7660e4fab43be298522db2cda7, type: 2}
   - {fileID: 11400000, guid: 2fcada5c3037d7a4babdc17b462b932f, type: 2}
   - {fileID: 11400000, guid: f7d9fa3ea348c7749939bfcd0e8269e8, type: 2}
+  - {fileID: 11400000, guid: 01f1d00f00835e343be55bf6b91fd59a, type: 2}
+  - {fileID: 11400000, guid: b133eeacf1708aa4b96ceacf225958b1, type: 2}
   taskLists:
-  - name: EV3_01 - 3 tasks
-    robot: {fileID: 11400000, guid: 50514d7660e4fab43be298522db2cda7, type: 2}
+  - name: 1. 4 steps to complete
     list:
     - name: task 1
-      task: 0
-      newPosition: {x: -4, y: 0, z: -36}
+      task: 1
+      newPosition: {x: 0, y: 0, z: 0}
       moveTo: {x: 0, y: 0, z: 0}
       waitForSeconds: 0
     - name: task 2
-      task: 1
-      newPosition: {x: 30, y: 0, z: -2}
-      moveTo: {x: 0, y: 0, z: 0}
-      waitForSeconds: 0
-    - name: task 3
       task: 2
       newPosition: {x: 0, y: 0, z: 0}
       moveTo: {x: 0, y: 0, z: 0}
       waitForSeconds: 3
-  - name: EV3_03 - 3 tasks
-    robot: {fileID: 11400000, guid: f7d9fa3ea348c7749939bfcd0e8269e8, type: 2}
-    list:
-    - name: task 1
-      task: 0
-      newPosition: {x: -2.5, y: 0, z: -20}
-      moveTo: {x: 0, y: 0, z: 0}
-      waitForSeconds: 0
-    - name: task 2
+    - name: task 3
       task: 1
       newPosition: {x: 0, y: 0, z: 0}
-      moveTo: {x: 2.5, y: 0, z: 20}
+      moveTo: {x: 42, y: 0, z: 36}
       waitForSeconds: 0
-    - name: task 3
-      task: 2
-      newPosition: {x: 0, y: 0, z: 0}
-      moveTo: {x: 0, y: 0, z: 0}
-      waitForSeconds: 5
-  - name: EV3_02 - 4 tasks
-    robot: {fileID: 11400000, guid: 2fcada5c3037d7a4babdc17b462b932f, type: 2}
-    list:
-    - name: task 1
-      task: 0
-      newPosition: {x: -4, y: 0, z: 36}
-      moveTo: {x: 0, y: 0, z: 0}
-      waitForSeconds: 0
-    - name: task 2
-      task: 1
-      newPosition: {x: 0, y: 0, z: 0}
-      moveTo: {x: 15, y: 0, z: -2}
-      waitForSeconds: 5
-    - name: task 3
-      task: 2
-      newPosition: {x: 0, y: 0, z: 0}
-      moveTo: {x: 0, y: 0, z: 0}
-      waitForSeconds: 2
     - name: task 4
+      task: 2
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: 0, y: 0, z: 0}
+      waitForSeconds: 3
+    var1: 0
+    var2: 0
+    var3: 0
+    var4: 0
+  - name: 2. 4 steps to complete
+    list:
+    - name: task 1
       task: 1
       newPosition: {x: 0, y: 0, z: 0}
-      moveTo: {x: 22, y: 0, z: 24}
-      waitForSeconds: 2
+      moveTo: {x: 23, y: 0, z: -14}
+      waitForSeconds: 0
+    - name: task 2
+      task: 2
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: 0, y: 0, z: 0}
+      waitForSeconds: 3
+    - name: task 3
+      task: 1
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: -14, y: 0, z: -36}
+      waitForSeconds: 0
+    - name: task 4
+      task: 2
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: 0, y: 0, z: 0}
+      waitForSeconds: 3
+    var1: 0
+    var2: 1
+    var3: 1
+    var4: 0
+  - name: 3. 4 steps to complete
+    list:
+    - name: task 1
+      task: 1
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: -14, y: 0, z: -36}
+      waitForSeconds: 0
+    - name: task 2
+      task: 2
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: 0, y: 0, z: 0}
+      waitForSeconds: 3
+    - name: task 3
+      task: 1
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: 8, y: 0, z: -2}
+      waitForSeconds: 0
+    - name: task 4
+      task: 2
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: 0, y: 0, z: 0}
+      waitForSeconds: 3
+    var1: 0
+    var2: 1
+    var3: 1
+    var4: 0
+  - name: 4. 4 steps to complete
+    list:
+    - name: task 1
+      task: 1
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: -14, y: 0, z: -36}
+      waitForSeconds: 0
+    - name: task 2
+      task: 2
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: 0, y: 0, z: 0}
+      waitForSeconds: 3
+    - name: task 3
+      task: 1
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: 8, y: 0, z: -2}
+      waitForSeconds: 0
+    - name: task 4
+      task: 2
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: 0, y: 0, z: 0}
+      waitForSeconds: 3
+    var1: 0
+    var2: 1
+    var3: 1
+    var4: 0
+  - name: 5. 4 steps to complete
+    list:
+    - name: task 1
+      task: 1
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: -14, y: 0, z: -36}
+      waitForSeconds: 0
+    - name: task 2
+      task: 2
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: 0, y: 0, z: 0}
+      waitForSeconds: 3
+    - name: task 3
+      task: 1
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: 8, y: 0, z: -2}
+      waitForSeconds: 0
+    - name: task 4
+      task: 2
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: 0, y: 0, z: 0}
+      waitForSeconds: 3
+    var1: 0
+    var2: 1
+    var3: 1
+    var4: 0
+  - name: 6. 4 steps to complete
+    list:
+    - name: task 1
+      task: 1
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: -14, y: 0, z: -36}
+      waitForSeconds: 0
+    - name: task 2
+      task: 2
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: 0, y: 0, z: 0}
+      waitForSeconds: 3
+    - name: task 3
+      task: 1
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: 8, y: 0, z: -2}
+      waitForSeconds: 0
+    - name: task 4
+      task: 2
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: 0, y: 0, z: 0}
+      waitForSeconds: 3
+    var1: 0
+    var2: 1
+    var3: 1
+    var4: 0
+  - name: 7. 4 steps to complete
+    list:
+    - name: task 1
+      task: 1
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: -14, y: 0, z: -36}
+      waitForSeconds: 0
+    - name: task 2
+      task: 2
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: 0, y: 0, z: 0}
+      waitForSeconds: 3
+    - name: task 3
+      task: 1
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: 8, y: 0, z: -2}
+      waitForSeconds: 0
+    - name: task 4
+      task: 2
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: 0, y: 0, z: 0}
+      waitForSeconds: 3
+    var1: 0
+    var2: 1
+    var3: 1
+    var4: 0
+  - name: 8. 4 steps to complete
+    list:
+    - name: task 1
+      task: 1
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: -14, y: 0, z: -36}
+      waitForSeconds: 0
+    - name: task 2
+      task: 2
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: 0, y: 0, z: 0}
+      waitForSeconds: 3
+    - name: task 3
+      task: 1
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: 8, y: 0, z: -2}
+      waitForSeconds: 0
+    - name: task 4
+      task: 2
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: 0, y: 0, z: 0}
+      waitForSeconds: 3
+    var1: 0
+    var2: 1
+    var3: 1
+    var4: 0
+  - name: 9. 4 steps to complete
+    list:
+    - name: task 1
+      task: 1
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: -14, y: 0, z: -36}
+      waitForSeconds: 0
+    - name: task 2
+      task: 2
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: 0, y: 0, z: 0}
+      waitForSeconds: 3
+    - name: task 3
+      task: 1
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: 8, y: 0, z: -2}
+      waitForSeconds: 0
+    - name: task 4
+      task: 2
+      newPosition: {x: 0, y: 0, z: 0}
+      moveTo: {x: 0, y: 0, z: 0}
+      waitForSeconds: 3
+    var1: 0
+    var2: 1
+    var3: 1
+    var4: 0
 --- !u!4 &1397910136
 Transform:
   m_ObjectHideFlags: 0
@@ -37817,6 +38061,36 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4734641057727358, guid: 9c0c7b8c3e905b545952954f64e869bf,
     type: 2}
   m_PrefabInternal: {fileID: 1753576464}
+--- !u!1 &1786653681
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1786653682}
+  m_Layer: 0
+  m_Name: lighting
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1786653682
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1786653681}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 393891455}
+  - {fileID: 245310261}
+  m_Father: {fileID: 327991892}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1803620651
 Prefab:
   m_ObjectHideFlags: 0
@@ -46206,7 +46480,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1949305838}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -46233,8 +46507,8 @@ Transform:
   - {fileID: 262137168}
   - {fileID: 1310839953}
   - {fileID: 1205769472}
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_Father: {fileID: 327991892}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1949305840
 MonoBehaviour:
@@ -46409,7 +46683,7 @@ Transform:
   - {fileID: 572812749}
   - {fileID: 287766558}
   m_Father: {fileID: 327991892}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2046549238
 Prefab:

@@ -13,6 +13,8 @@ public class Robot : ScriptableObject {
     public float rotateSpeed;
     public float diameter;
 
+    public Vector2 startPosition;
+
     public bool var1;
     public bool var2;
     public bool var3;
